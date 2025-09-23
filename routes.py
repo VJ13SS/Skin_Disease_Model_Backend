@@ -22,7 +22,15 @@ def perdict():
 
     try:
         img_path = ""
-        class_indices = {}
+        class_indices = {'Actinic keratosis': 0,
+ 'Atopic Dermatitis': 1,
+ 'Benign keratosis': 2,
+ 'Dermatofibroma': 3,
+ 'Melanocytic nevus': 4,
+ 'Melanoma': 5,
+ 'Squamous cell carcinoma': 6,
+ 'Tinea Ringworm Candidiasis': 7,
+ 'Vascular lesion': 8}
         model = load_model("skin_disease_model.keras")
         
         prediction = predict_image(img_path,model,class_indices)
