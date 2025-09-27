@@ -1,9 +1,9 @@
 from flask import Blueprint,jsonify,request
-import tensorflow
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import cv2
+from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img,img_to_array
 import numpy as np
@@ -27,8 +27,7 @@ def perdict():
 
     try:
         data = request.files['file']
-        print(data)
-        img_path = ""
+        img_path = data
         class_indices = {'Actinic keratosis': 0,
  'Atopic Dermatitis': 1,
  'Benign keratosis': 2,
@@ -38,7 +37,7 @@ def perdict():
  'Squamous cell carcinoma': 6,
  'Tinea Ringworm Candidiasis': 7,
  'Vascular lesion': 8}
-        model = load_model("models/skin_disease_model.keras")
+        model = load_model("skin_disease_model.keras",compile=False)
 
         file_bytes = np.frombuffer(data.read(),np.uint8)
         img = cv2.imdecode(file_bytes,cv2.IMREAD_COLOR)
@@ -49,7 +48,8 @@ def perdict():
         plt.savefig('output.png')
         
         prediction = predict_image(img_path,model,class_indices)
-        
+        print(prediction)
         return jsonify({'res':'result'}),200
-    except:
+    except Exception as e:
+        print(e)
         return jsonify({'error':'Some Error Occured'}),404
