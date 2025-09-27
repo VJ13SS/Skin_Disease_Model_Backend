@@ -9,6 +9,7 @@ img_path = 'ISIC_0000166.jpg'
 img = image.load_img(img_path,target_size=(32,32))
 img_array = image.img_to_array(img)/255.0
 img_array = np.expand_dims(img_array,axis=0)
+class_names = ['akiec','bcc','bkl','df','mel','nv','vasc']
 
 predict = model.predict(img_array)
 print('helo',np.argmax(predict))
