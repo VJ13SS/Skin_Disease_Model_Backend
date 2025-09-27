@@ -7,12 +7,20 @@ from io import BytesIO
 
 main = Blueprint('main',__name__)
 
+"""Melanocytic nevi (nv)
+Melanoma (mel)
+Benign keratosis-like lesions (bkl)
+Basal cell carcinoma (bcc)
+Actinic keratoses (akiec)
+Vascular lesions (vas)
+Dermatofibroma (df)"""
+
 @main.route('/predict',methods = ['POST'])
 def perdict():
 
     try:
         data = request.files['file']
-        class_names = ['akiec','bcc','bkl','df','mel','nv','vasc']
+        class_names = ['Actinic keratoses','Basal cell carcinoma','Benign keratosis-like lesions','Dermatofibroma','Melanoma','Melanocytic nevi','Vascular lesions']
         
         model = load_model("models/skin_cancer_model.h5",compile=False)
         img_path = BytesIO(data.read())
@@ -23,8 +31,8 @@ def perdict():
         predict = model.predict(img_array)
         res = class_names[np.argmax(predict)]
 
-        print('helo',res)
-        return jsonify({'res':'result'}),200
+        print(res)
+        return jsonify({'res':res}),200
     except Exception as e:
         print(e)
-        return jsonify({'error':'Some Error Occured'}),404
+        return jsonify({'error':e}),404
